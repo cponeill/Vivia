@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Vivia</title>
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.4.0/annyang.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
@@ -39,6 +40,11 @@
         	searchTracks(query);
         }
 
+    function message(text) {
+        var rec = document.getElementById('conversation');
+        rec.innerHTML += '<div class="recognized">' + text + '<div>';
+    }
+
     function communicateAction(text) {
         var rec = document.getElementById('conversation');
         rec.innerHTML += '<div class="action">' + text + '</div>';
@@ -51,14 +57,18 @@
 
     function question(text) {
       var rec = document.getElementById('conversation');
-      rec.innerHTML += '<div class="recognized"><div>' + text + '</div><div>';
+      rec.innerHTML += '<div class="recognized">' + text + '<div>';
     }
 
     if (annyang) {
         // Let's define our first command. First the text we expect, and then the function it should call
         var commands = {
             'stop': function () {
+                message("Stopping music. Is there something else you want to listen to?");
                 audio.pause();
+            },
+                'hello (there)': function(msg) {
+                    message("Hello to you too! What song would you like to hear today?");
             },
                 'play track *song': function (song) {
                 recognized('Play track ' + song);
@@ -78,7 +88,8 @@
             },
                 ':nomatch': function (message) {
                 recognized(message);
-                communicateAction('Sorry, I don\'t understand this action');
+                message('Sorry, I don\'t understand this action');
+                question("Could you please repeat that? I didn't quite get it.");
             }
         };
 
@@ -107,7 +118,12 @@
                 </div>
                 
                 <div class="card-content">
-                    <center><h1>Voicify</h1></center>
+                <center>
+                    <h1>Vivia</h1>
+                    <h3>The best intelligent music assistant</h3>
+                    <h4>You can start by saying hello!</h4>
+                    <small>say hello!</small>
+                </center>
                 <div class="card-action">
                     <div id="conversation"></div>
                 </div>
