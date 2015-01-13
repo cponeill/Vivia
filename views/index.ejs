@@ -85,6 +85,12 @@
                     setTimeout(function() {
                         question("That was fun. Do you have another question for me?");
                     }, 3000);
+                },
+                error: function(err) {
+                    console.log(err);
+                },
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-Mashape-Authorization", "F8OUkd9OdKmsh7uy3O3Lvx574Wo7p1AnrrijsnTHk1a08Q9GSc");
                 }
             });
         }
