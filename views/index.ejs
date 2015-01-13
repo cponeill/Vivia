@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Vivia</title>
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <title>Vivian</title>
+    <!--<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>-->
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.4.0/annyang.min.js"></script>
     <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">-->
     <script src="/javascripts/app.js"></script>
@@ -34,6 +35,7 @@
             });
     	}
 
+        // play 30 second snippet of song chosen. 
     	function playSong(songName, artistName) {
     		var query = songName;
     		if (artistName) {
@@ -42,17 +44,46 @@
         	searchTracks(query);
         }
 
+        function playSongSlow(songName, artistName) {
+            var query = songName;
+            if (artistName) {
+                query += ' artist:' + artistName;
+            }
+            setTimeout(function() {
+                message("Yes I can.")
+                searchTracks(query);
+            }, 3000);
+        }
+
         // search Coindesk API for current price quotes. 
         function showBitcoinPrice() {
             var url = 'https://api.coindesk.com/v1/bpi/currentprice/USD.json';
             $.getJSON(url, function(result) {
                 var rate = result.bpi.USD.rate;
-                communicateAction('<div>The current price of Bitcoin is: ' + rate);
+                communicateAction('<div>The current price of Bitcoin is: $' + rate);
                 setTimeout(function() {
                     question("Is there anything else I can do for you?");
                 }, 5000);
             });
         }
+
+        // search DuckDuckGo for simple queries.
+        function searchDDG(topic) {
+            var url = "http://api.duckduckgo.com/?q=" + encodeURIComponent(topic) + "&format=json&pretty=1&callback=?";
+            $.getJSON(url, function(data) {
+                var topicList = $('<ul>');
+                $.each(data.RelatedTopics, function(index, item) {
+                    $("<li/>", {
+                        text: item.Text,
+                        class: "result"
+                    });
+                    communicateAction(topicList);
+                });
+            });
+        }
+    
+
+
 
         /* search api.wunderground for current weather
         function showWeather() {
@@ -113,9 +144,17 @@
                 recognized('Playing ' + song);
                 playSong(song);
             },
-                '(*find *what) (*is *the) (*current *recent) price (*of *bitcoin)': function(price) {
-                recognized(price);
+                '(*what *is *the) (*current *recent) price of bitcoin': function(price) {
+                recognized('What is the current price of bitcoin? ' + price);
                 showBitcoinPrice();
+            },
+                'can you play *song': function (song) {
+                recognized("Hmmm... Let me check.")
+                playSongSlow(song);
+            },
+                '(*find) (*look *up)': function (search) {
+                recognized("Using Duck Duck Go to find " + search)
+                searchDDG(search);
             },
                 ':nomatch': function (message) {
                 recognized(message);
@@ -150,7 +189,7 @@
                 
                 <div class="card-content">
                 <center>
-                    <h1>Vivia</h1>
+                    <h1>Vivian</h1>
                     <h3>A new intelligent assistant</h3>
                     <h4>You can start by saying hello!</h4>
                 </center>
