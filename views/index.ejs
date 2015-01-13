@@ -4,12 +4,15 @@
     <title>Vivia</title>
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.4.0/annyang.min.js"></script>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">-->
     <script src="/javascripts/app.js"></script>
     <script>
     (function () {
+
+        // instantiate new Audio object.
     	var audio = new Audio();
 
+        // search Spotify API for artist and song queryies.
     	function searchTracks(query) {
     		$.ajax({
     			url: 'https://api.spotify.com/v1/search',
@@ -25,9 +28,8 @@
                         communicateAction('<div>Playing ' + track.name + ' by ' + track.artists[0].name + '</div><img width="150" src="' + track.album.images[1].url + '">');
                         setTimeout(function() {
                           question('Would you like to hear another song?');
-                        }, 30000)
+                        }, 30000);
                     }
-
                 }
             });
     	}
@@ -40,25 +42,50 @@
         	searchTracks(query);
         }
 
-    function message(text) {
-        var rec = document.getElementById('conversation');
-        rec.innerHTML += '<div class="recognized">' + text + '<div>';
-    }
+        // search Coindesk API for current price quotes. 
+        function showBitcoinPrice() {
+            var url = 'https://api.coindesk.com/v1/bpi/currentprice/USD.json';
+            $.getJSON(url, function(result) {
+                var rate = result.bpi.USD.rate;
+                communicateAction('<div>The current price of Bitcoin is: ' + rate);
+                setTimeout(function() {
+                    question("Is there anything else I can do for you?");
+                }, 5000);
+            });
+        }
 
-    function communicateAction(text) {
-        var rec = document.getElementById('conversation');
-        rec.innerHTML += '<div class="action">' + text + '</div>';
-    }
+        /* search api.wunderground for current weather
+        function showWeather() {
+            var url = 'http://api.wunderground.com/api/36b799dc821d5836/conditions/q/WA/Seattle.json';
+            dataType: 'jsonp',
+            data: 'url',
+            success: (data) ->
+                for index, result of data
+                    temp    = Math.round result.temp_f
+                    icon    = result.icon_url
+                    weather = result.weather
+        }
+        */
 
-    function recognized(text) {
-        var rec = document.getElementById('conversation');
-        rec.innerHTML += '<div class="recognized"><div>' + text + '</div></div>';
-    }
+        function message(text) {
+            var rec = document.getElementById('conversation');
+            rec.innerHTML += '<div class="recognized">' + text + '<div>';
+        }
 
-    function question(text) {
-      var rec = document.getElementById('conversation');
-      rec.innerHTML += '<div class="recognized">' + text + '<div>';
-    }
+        function communicateAction(text) {
+            var rec = document.getElementById('conversation');
+            rec.innerHTML += '<div class="action">' + text + '</div>';
+        }
+
+        function recognized(text) {
+            var rec = document.getElementById('conversation');
+            rec.innerHTML += '<div class="recognized">' + text + '</div>';
+        }
+
+        function question(text) {
+            var rec = document.getElementById('conversation');
+            rec.innerHTML += '<div class="recognized">' + text + '<div>';
+        }
 
     if (annyang) {
         // Let's define our first command. First the text we expect, and then the function it should call
@@ -67,8 +94,8 @@
                 message("Stopping music. Is there something else you want to listen to?");
                 audio.pause();
             },
-                'hello (there)': function(msg) {
-                    message("Hello to you too! What song would you like to hear today?");
+                'hello (*vivia *there *robot)': function(msg) {
+                    message("Hello to you too! What can I do for you today?");
             },
                 'play track *song': function (song) {
                 recognized('Play track ' + song);
@@ -85,6 +112,10 @@
                 'play *song': function (song) {
                 recognized('Playing ' + song);
                 playSong(song);
+            },
+                '(*find *what) (*is *the) (*current *recent) price (*of *bitcoin)': function(price) {
+                recognized(price);
+                showBitcoinPrice();
             },
                 ':nomatch': function (message) {
                 recognized(message);
@@ -120,9 +151,8 @@
                 <div class="card-content">
                 <center>
                     <h1>Vivia</h1>
-                    <h3>The best intelligent music assistant</h3>
+                    <h3>A new intelligent assistant</h3>
                     <h4>You can start by saying hello!</h4>
-                    <small>say hello!</small>
                 </center>
                 <div class="card-action">
                     <div id="conversation"></div>
