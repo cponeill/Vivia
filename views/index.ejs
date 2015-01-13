@@ -67,18 +67,25 @@
             });
         }
 
-        // search DuckDuckGo for simple queries.
-        function searchDDG(topic) {
-            var url = "http://api.duckduckgo.com/?q=" + encodeURIComponent(topic) + "&format=json&pretty=1&callback=?";
-            $.getJSON(url, function(data) {
-                var topicList = $('<ul>');
-                $.each(data.RelatedTopics, function(index, item) {
-                    $("<li/>", {
-                        text: item.Text,
-                        class: "result"
-                    });
-                    communicateAction(topicList);
-                });
+        // search webknox for simple queries.
+        // Review this code 1/13/15
+        function searchNews(query) {
+            $.ajax({
+                url: 'https://webknox-search.p.mashape.com/index/websites',
+                type: 'GET',
+                data: {
+                    numResults: 20,
+                    offset: 10,
+                    query: query
+                },
+                dataType: 'json',
+                success: function(data) {
+                    var answer = JSON.stringify(data.results[0]);
+                    communicateAction('<div> The answer you are looking for is: ' + answer + '</div>');
+                    setTimeout(function() {
+                        question("That was fun. Do you have another question for me?");
+                    }, 3000);
+                }
             });
         }
     
@@ -153,8 +160,8 @@
                 playSongSlow(song);
             },
                 '(*find) (*look *up)': function (search) {
-                recognized("Using Duck Duck Go to find " + search)
-                searchDDG(search);
+                recognized("Looking... Looking.... " + search)
+                searchNews(search)
             },
                 ':nomatch': function (message) {
                 recognized(message);
