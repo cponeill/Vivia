@@ -80,7 +80,7 @@
                 },
                 dataType: 'json',
                 success: function(data) {
-                    var answer = JSON.stringify(data.results[0]);
+                    var answer = data.results;
                     communicateAction('<div> The answer you are looking for is: ' + answer + '</div>');
                     setTimeout(function() {
                         question("That was fun. Do you have another question for me?");
@@ -96,6 +96,28 @@
         }
     
 
+        /* search duck duck go api
+        function searchDDG(query) {
+                var answer = $("#topic").val();
+                var url = "http://api.duckduckgo.com/?q=" + encodeURIComponent(query) + "&format=json&pretty=1&callback=?";
+                $.getJSON(url, function(data) {
+                    var topicList = $("<ul/>");
+                    $.each(data.RelatedTopics, function(index, item) {
+                        $("<li/>", {
+                            text: item.Text,
+                            class: "result"
+                        }).appendTo(topicList);
+                    });
+                    $("#conversation").fadeOut("fast", function() {
+                        $(this).empty().append(topicList).fadeIn(10);
+                    });
+                }).done(function() {
+                    console.log("chained success");
+                }).fail(function() {
+                    console.log("not called for cross-domain JSONP requests");
+                }).always(function() {console.log("chained complete");
+            }); 
+        }
 
 
         /* search api.wunderground for current weather
