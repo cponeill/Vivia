@@ -1,4 +1,4 @@
-* {
+{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -16,8 +16,92 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
-    background-color: yellowgreen;
+    background-color: white;
 }
+
+
+/* BASE STRUCTURE */
+
+body {
+  font-family: 'Proxima Nova', 'Helvetica', 'Arial', sans-serif;
+  background-color: #fff;
+  color: #000;
+}
+
+section#card {
+  bottom: 20%;
+  left: 12%;
+  height: 100px;
+  text-align: center;
+  margin-top: 15%;
+}
+
+h1,
+h1 a:link {
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 0px;
+}
+
+h1 a:hover {
+  color: #ff0000;
+}
+
+h2 {
+  margin-top: 8px;
+  font-size: 17px;
+  font-weight: 100;
+  line-height: 22px;
+  max-width: 400px;
+}
+
+h2 a:link,
+h2 a:visited,
+h2 a:active,
+h2 a:hover {
+  border-bottom: 2px solid #ccc;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  margin-top: 27px;
+}
+
+ul li {
+  margin: 0px;
+  padding: 0px;
+  margin-bottom: 3px;
+}
+
+a:link,
+a:hover,
+a:visited,
+a:active {
+  color: #000;
+  border: none;
+  text-decoration: none;
+
+  font-weight: 100;
+}
+
+a:hover {
+  color: #88C6FD;
+}
+
+ul a {
+  font-size: 14px;
+  line-height: 19px;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+footer {
+  margin: 225 1.5% 24px 1.5%;
+}
+
+
 main {
     flex: 1;
     margin: 20px auto;
@@ -40,7 +124,7 @@ ul {
 }
 .action {
     text-align: right;
-    background-color: yellowgreen;
+    background-color: #88C6FD;
     margin-left:20%;
     border-radius: 5px 5px 0 5px;
 }
@@ -51,8 +135,7 @@ ul {
     height: 0;
     border-width: 18px;
     border-style: solid;
-  /*  border-color: transparent transparent #9ACD32 transparent; */
-    border-color: transparent transparent transparent;
+    border-color: #88C6FD transparent transparent;
     bottom: 0px;
     right: -17px;
 }
@@ -69,7 +152,7 @@ ul {
     height: 0;
     border-width: 18px;
     border-style: solid;
-    border-color: transparent transparent transparent;
+    border-color: #eee transparent transparent;
     bottom: 0px;
     left: -17px;
 }
