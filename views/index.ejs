@@ -60,77 +60,47 @@
             var url = 'https://api.coindesk.com/v1/bpi/currentprice/USD.json';
             $.getJSON(url, function(result) {
                 var rate = result.bpi.USD.rate;
-                communicateAction('<div>The current price of Bitcoin is: $' + rate);
+                communicateAction('<div>The current price of Bitcoin is: $' + rate + '</div>');
                 setTimeout(function() {
                     question("Is there anything else I can do for you?");
-                }, 5000);
+                }, 1000);
             });
         }
 
-        // search webknox for simple queries.
-        // Review this code 1/13/15
-       /* function searchNews(q) {
-            var url = 'https://webknox-search.p.mashape.com/index/websites?numResults=20&offset=10&query=' + q;
-            q = 'deadmau5';
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: {
-                    query: q
-                },
-                dataType: 'json',
-                success: function(data) {
-                    var question = data.results[0];
-                    var answerTitle = question.title;
-                    var answerUrl = question.url;
-                    communicateAction('<div> The answer you are looking for is: ' + answerUrl + '</div>');
-                },
-                error: function(err) {
-                    console.log(err);
-                },
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader("X-Mashape-Authorization", "F8OUkd9OdKmsh7uy3O3Lvx574Wo7p1AnrrijsnTHk1a08Q9GSc");
-                }
+        // Show the current date and time
+        function showTheTime() {
+            var date = new Date();
+            var time = date.toLocaleTimeString();
+            communicateAction('<div>The time right now is ' + time + "</div>");
+            setTimeout(function() {
+                question("What else can I do for you?");
+            }, 1000);
+        }
+
+        // Random facts about years
+        function showRandomYearFact() {
+            var url = "http://numbersapi.com/random/year?json";
+            $.getJSON(url, function(result) {
+                var answer = result.text;
+                communicateAction('<div>One random fact about a year coming up!</div>');
+                communicateAction('<div>' + answer + '</div>');
+                setTimeout(function() {
+                    question("What else do you want to know?");
+                }, 1000);
             });
         }
-    
 
-        /* search duck duck go api
-        function searchDDG(query) {
-                var answer = $("#div[class=recognized]").val();
-                var url = "http://api.duckduckgo.com/?q=" + encodeURIComponent(answer) + "&format=json&pretty=1&callback=?";
-                $.getJSON(url, function(data) {
-                    var topicList = $("<ul/>");
-                    $.each(data.RelatedTopics, function(index, item) {
-                        $("<li/>", {
-                            text: item.Text,
-                            class: "result"
-                        }).appendTo(topicList);
-                    });
-                    communicateAction($("#conversation").fadeOut("fast", function() {
-                        $(this).empty().append(topicList));
-                    });
-                }).done(function() {
-                    console.log("chained success");
-                }).fail(function() {
-                    console.log("not called for cross-domain JSONP requests");
-                }).always(function() {console.log("chained complete");
-            }); 
+        function showRandomTrivia() {
+            var url = "http://numbersapi.com/random/trivia?json";
+            $.getJSON(url, function(result) {
+                var answer = result.text;
+                communicateAction('<div>' + answer + '</div>');
+                setTimeout(function() {
+                    question("Want to know any other random facts?");
+                }, 1000);
+            });
         }
-        */
-
-        /* search api.wunderground for current weather
-        function showWeather() {
-            var url = 'http://api.wunderground.com/api/36b799dc821d5836/conditions/q/WA/Seattle.json';
-            dataType: 'jsonp',
-            data: 'url',
-            success: (data) ->
-                for index, result of data
-                    temp    = Math.round result.temp_f
-                    icon    = result.icon_url
-                    weather = result.weather
-        }
-        */
+        
 
         function message(text) {
             var rec = document.getElementById('conversation');
@@ -178,13 +148,25 @@
                 recognized('Playing ' + song);
                 playSong(song);
             },
-                '(*what *is *the) (*current *recent) price of bitcoin': function(price) {
-                recognized('What is the current price of bitcoin? ' + price);
+                '(*what *is *the) (*current *recent) price of bitcoin': function() {
+                recognized('What is the current price of bitcoin?');
                 showBitcoinPrice();
             },
                 'can you play *song': function (song) {
                 recognized("Hmmm... Let me check.")
                 playSongSlow(song);
+            },
+                'what time is it': function (time) {
+                recognized("Hmmm... Let me check.")
+                showTheTime();
+            },
+                'tell me something (*else) about a random year': function () {
+                recognized("Randomness coming up...")
+                showRandomYearFact();
+            },
+                'tell me some *random trivia': function () {
+                recognized("You want to know some random trivia huh? Well here you go.")
+                showRandomTrivia()
             },
                 ':nomatch': function (message) {
                 recognized(message);
@@ -219,8 +201,8 @@
                 
                 <div class="card-content">
                 <center>
-                    <h1>VIVIAN.IO</h1>
-                    <h2>Open source intelligent assistant <br />
+                    <h1>Meet Vivian!</h1>
+                    <h2>The webs intelligent assistant<br />
                         You can start by saying hello!</h2>
                 </center>
                 <div class="card-action">
