@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Vivian</title>
+    <link rel='shortcut icon' href='/images/ThoughtBubble.ico' />
     <!--<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>-->
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.4.0/annyang.min.js"></script>
@@ -102,7 +103,7 @@
             });
         }
 
-        // Search the numbersapi for a specific number.
+        // Search the numbersapi for a specific number. 
         function showNumber(number) {
             var url = "http://numbersapi.com/" + number + "?json";
             $.getJSON(url, function(result) {
@@ -112,14 +113,12 @@
                     question('<div>Is there anything else you would like to know?</div>');
                 }, 1000);  
             });
+            var searchNumber = function(findNum) {
+                var number = findNum;
+                showNumber(number);
+            };
         }
         
-        // call that number.
-        function searchNumber(findNum) {
-            var number = findNum;
-            showNumber(number);
-        }
-
         // Duck Duck Go Simple Search API
         function simpleSearch(topic) {
             var url = "http://api.duckduckgo.com/?q=" + encodeURIComponent(topic) + "&format=json&pretty=1&callback=?";
@@ -127,11 +126,10 @@
                 var answer = JSON.stringify(data.RelatedTopics[0].Text);
                 communicateAction('<div>' + answer + '</div>')
             });
-        }
-
-        function duckSearch(results) {
-            var answer = results;
-            simpleSearch(answer);
+            var duckSearch = function(results) {
+                var answer = results;
+                simpleSearch(answer);
+            };
         }
 
         // Start in app messages.
@@ -203,11 +201,11 @@
             },
                 'tell me about the number *num': function (num) {
                 recognized("hmmmmm.... Let me think about that.<br />So you want to know about the number " + num);
-                searchNumber(num);
+                showNumber(num);
             },
                 'look up *search': function (search) {
-                recognized("hmmmmm.... Let me think about that.<br />So you want to know about the number " + search);
-                duckSearch(search);
+                recognized("Ahhh... " + search + ". Let's look that up...");
+                simpleSearch(search);
             },
                 ':nomatch': function (message) {
                 recognized(message);
@@ -242,7 +240,7 @@
                 
                 <div class="card-content">
                 <center>
-                    <h1>Meet Vivian!</h1>
+                    <h1><img src="/images/ThoughtBubble.png" />Meet Vivian!</h1>
                     <h2>The webs intelligent assistant<br />
                         You can start by saying hello!</h2>
                 </center>
