@@ -82,7 +82,7 @@
             var url = "http://numbersapi.com/random/year?json";
             $.getJSON(url, function(result) {
                 var answer = result.text;
-                communicateAction('<div>One random fact about a year coming up!</div>');
+                question('<div>One random fact about a year coming up!</div>');
                 communicateAction('<div>' + answer + '</div>');
                 setTimeout(function() {
                     question("What else do you want to know?");
@@ -109,8 +109,8 @@
                 var answer = result.text;
                 communicateAction('<div>' + answer + '</div>');
                 setTimeout(function() {
-                    communicateAction('<div>Is there anything else you would like to know?</div>');
-                }, 1000);
+                    question('<div>Is there anything else you would like to know?</div>');
+                }, 1000);  
             });
         }
         
@@ -120,6 +120,19 @@
             showNumber(number);
         }
 
+        // Duck Duck Go Simple Search API
+        function simpleSearch(topic) {
+            var url = "http://api.duckduckgo.com/?q=" + encodeURIComponent(topic) + "&format=json&pretty=1&callback=?";
+            $.getJSON(url, function(data) {
+                var answer = JSON.stringify(data.RelatedTopics[0].Text);
+                communicateAction('<div>' + answer + '</div>')
+            });
+        }
+
+        function duckSearch(results) {
+            var answer = results;
+            simpleSearch(answer);
+        }
 
         // Start in app messages.
         function message(text) {
@@ -177,7 +190,7 @@
                 playSongSlow(song);
             },
                 'what time is it': function (time) {
-                recognized("Hmmm... Let me check.")
+                recognized("Hmmm... Let me check the time for you.")
                 showTheTime();
             },
                 'tell me something (*else) about a random year': function () {
@@ -191,6 +204,10 @@
                 'tell me about the number *num': function (num) {
                 recognized("hmmmmm.... Let me think about that.<br />So you want to know about the number " + num);
                 searchNumber(num);
+            },
+                'look up *search': function (search) {
+                recognized("hmmmmm.... Let me think about that.<br />So you want to know about the number " + search);
+                duckSearch(search);
             },
                 ':nomatch': function (message) {
                 recognized(message);
