@@ -67,7 +67,7 @@
             });
         }
 
-        // Show the current date and time
+        // Show the current date and time.
         function showTheTime() {
             var date = new Date();
             var time = date.toLocaleTimeString();
@@ -77,7 +77,7 @@
             }, 1000);
         }
 
-        // Random facts about years
+        // Random facts about years.
         function showRandomYearFact() {
             var url = "http://numbersapi.com/random/year?json";
             $.getJSON(url, function(result) {
@@ -90,6 +90,7 @@
             });
         }
 
+        // Random trivia facts about numbers.
         function showRandomTrivia() {
             var url = "http://numbersapi.com/random/trivia?json";
             $.getJSON(url, function(result) {
@@ -100,8 +101,27 @@
                 }, 1000);
             });
         }
-        
 
+        // Search the numbersapi for a specific number.
+        function showNumber(number) {
+            var url = "http://numbersapi.com/" + number + "?json";
+            $.getJSON(url, function(result) {
+                var answer = result.text;
+                communicateAction('<div>' + answer + '</div>');
+                setTimeout(function() {
+                    communicateAction('<div>Is there anything else you would like to know?</div>');
+                }, 1000);
+            });
+        }
+        
+        // call that number.
+        function searchNumber(findNum) {
+            var number = findNum;
+            showNumber(number);
+        }
+
+
+        // Start in app messages.
         function message(text) {
             var rec = document.getElementById('conversation');
             rec.innerHTML += '<div class="recognized">' + text + '<div>';
@@ -164,9 +184,13 @@
                 recognized("Randomness coming up...")
                 showRandomYearFact();
             },
-                'tell me some *random trivia': function () {
+                'tell me some (*random) trivia': function () {
                 recognized("You want to know some random trivia huh? Well here you go.")
                 showRandomTrivia()
+            },
+                'tell me about the number *num': function (num) {
+                recognized("hmmmmm.... Let me think about that.<br />So you want to know about the number " + num);
+                searchNumber(num);
             },
                 ':nomatch': function (message) {
                 recognized(message);
