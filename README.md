@@ -6,7 +6,7 @@ Vivian is prototype that is a simple AI assistant. Currently it calls the Spotif
   cd Vivian/
   npm install
   npm run
-  Open your Chrome browser to http://localhost:8000/
+  Open your Chrome browser to localhost
   Make sure your Mic is turned on.
   Say Hello
   ```
