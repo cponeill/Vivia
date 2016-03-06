@@ -8,7 +8,10 @@ Vivian is prototype that is a simple AI assistant. Currently it calls the Spotif
   npm run
   Open your Chrome browser to http://localhost:8000/
   Make sure your Mic is turned on.
+  Say Hello
   ```
+
+Be sure to check through the code to see what works so far. This is just a very simple assistant right now so please feel free to add more features. 
   
   
   ![](https://github.com/cponeill/Vivia/blob/master/public/images/Vivian.jpg)
