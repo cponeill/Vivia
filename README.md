@@ -4,4 +4,10 @@ Vivian is prototype that is a simple AI assistant. Currently it calls the Spotif
   
 In order to easily run Vivian clone the repository to locally to your computer:
 
-  $ git clone http://github.com/cponeill/Vivian.git
+  ```
+  git clone http://github.com/cponeill/Vivian.git
+  cd Vivian/
+  npm install
+  npm run
+  ```
+  
